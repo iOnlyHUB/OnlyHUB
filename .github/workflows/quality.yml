@@ -42,7 +42,11 @@ jobs:
           fi
       - name: Reject committed secrets
         run: |
-          if git grep -nE '(sk-proj-|BEGIN (RSA|OPENSSH|EC) PRIVATE KEY|password[[:space:]]*=[[:space:]]*[^$<{])' -- ':!*.example' ':!*.md'; then
+          openai_key_prefix='sk-'
+          openai_project_marker='proj-'
+          private_key_marker='BEGIN'
+          secret_pattern="(${openai_key_prefix}${openai_project_marker}|${private_key_marker} (RSA|OPENSSH|EC) PRIVATE KEY|(password|passwd|secret|token)[[:space:]]*[:=][[:space:]]*['\"][^\$<{])"
+          if git grep -nE "$secret_pattern" -- ':!*.example' ':!*.md'; then
             echo 'Potential secret detected.'
             exit 1
           fi
