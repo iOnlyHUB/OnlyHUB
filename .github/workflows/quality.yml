@@ -1,0 +1,36 @@
+name: Quality
+
+on:
+  push:
+    branches: [main, agent/repository-bootstrap]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  php-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check PHP syntax
+        run: |
+          find wordpress -type f -name '*.php' -print0 | xargs -0 -n1 php -l
+
+  repository-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate required files
+        run: |
+          test -f docker-compose.yml
+          test -f .env.example
+          test -f wordpress/wp-content/themes/onlyhub/style.css
+          test -f wordpress/wp-content/themes/onlyhub/functions.php
+          test -f wordpress/wp-content/themes/onlyhub/front-page.php
+      - name: Reject committed secrets
+        run: |
+          if git grep -nE '(sk-proj-|BEGIN (RSA|OPENSSH|EC) PRIVATE KEY|password[[:space:]]*=[[:space:]]*[^$<{])' -- ':!*.example' ':!*.md'; then
+            echo 'Potential secret detected.'
+            exit 1
+          fi
