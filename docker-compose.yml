@@ -38,6 +38,25 @@ services:
       - ./wordpress/wp-content/themes/onlyhub:/var/www/html/wp-content/themes/onlyhub
       - ./wordpress/wp-content/mu-plugins:/var/www/html/wp-content/mu-plugins
 
+  wpcli:
+    image: wordpress:cli-2.11.0-php8.3
+    depends_on:
+      db:
+        condition: service_healthy
+      wordpress:
+        condition: service_started
+    user: "33:33"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME:-onlyhub}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER:-onlyhub}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD:-onlyhub_local_password}
+    volumes:
+      - wordpress_data:/var/www/html
+      - ./wordpress/wp-content/themes/onlyhub:/var/www/html/wp-content/themes/onlyhub
+      - ./wordpress/wp-content/mu-plugins:/var/www/html/wp-content/mu-plugins
+    entrypoint: ["wp", "--path=/var/www/html", "--allow-root"]
+
   adminer:
     image: adminer:4
     restart: unless-stopped
