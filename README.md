@@ -29,7 +29,7 @@ Create a reliable and transparent platform that makes helping others easy, fast,
 
 ---
 
-# ✨ Core Features
+# ✨ Product Scope
 
 - ❤️ Collection of charitable donations
 - 📦 Distribution of humanitarian aid
@@ -43,6 +43,19 @@ Create a reliable and transparent platform that makes helping others easy, fast,
 - 📱 Fully responsive interface
 - 🌐 Multilingual support
 - 🔐 Secure authorization
+
+## Current Foundation
+
+The active draft implementation currently includes:
+
+- a custom responsive WordPress theme and homepage;
+- project, partner and verified campaign content models;
+- protected applications, controlled registration, member roles and dashboard;
+- Support and Transparency Centre pages that exclude unverified campaigns and reports;
+- an administrative audit log and baseline WordPress hardening;
+- Docker-based local development, CI checks, smoke tests and deployment documentation.
+
+Payment processing is intentionally deferred to the final integration stage and is not active.
 
 ---
 
@@ -65,26 +78,16 @@ Create a reliable and transparent platform that makes helping others easy, fast,
 
 ```
 OnlyHUB/
-│
-├── wp-content/
-│   ├── themes/
-│   │   └── onlyhub/
-│   │
-│   ├── plugins/
-│   │
-│   └── uploads/
-│
-├── docker/
-│
+├── wordpress/
+│   └── wp-content/
+│       ├── themes/onlyhub/
+│       └── mu-plugins/
 ├── docs/
-│
-├── database/
-│
 ├── scripts/
-│
 ├── .github/
 │   └── workflows/
-│
+├── docker-compose.yml
+├── .env.example
 └── README.md
 ```
 
@@ -104,16 +107,17 @@ git clone https://github.com/iOnlyHUB/OnlyHUB.git
 cd OnlyHUB
 ```
 
-## Run Docker
+## Install the local site
 
 ```bash
-docker compose up -d
+scripts/install-local.sh
+scripts/seed-demo-content.sh
 ```
 
 Open
 
 ```
-http://localhost
+http://localhost:8080
 ```
 
 ---
@@ -124,15 +128,17 @@ http://localhost
 
 - [x] Repository creation
 - [x] Project planning
-- [ ] WordPress theme
-- [ ] UI Design
-- [ ] Homepage
+- [x] WordPress theme foundation
+- [x] Responsive UI foundation
+- [x] Homepage
+- [x] Projects, partners and campaigns
+- [x] Support and Transparency Centre
 
 ## Phase 2
 
-- [ ] User accounts
+- [x] Baseline user accounts and role controls
 - [ ] Volunteer portal
-- [ ] Donation module
+- [ ] Payment integration — final stage
 - [ ] Aid distribution
 
 ## Phase 3

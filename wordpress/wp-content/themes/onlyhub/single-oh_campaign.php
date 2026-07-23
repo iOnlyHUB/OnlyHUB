@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 get_header();
 ?>
-<main id="primary" class="site-main section-shell">
+<main id="main-content" class="site-main section-shell">
     <?php while (have_posts()) : the_post(); ?>
         <?php
         $campaign_id = get_the_ID();

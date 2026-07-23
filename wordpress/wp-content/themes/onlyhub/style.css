@@ -4,7 +4,7 @@ Theme URI: https://only-hub.org
 Author: OnlyHUB
 Author URI: https://only-hub.org
 Description: Custom, accessible and performance-focused WordPress theme for the OnlyHUB international charity ecosystem.
-Version: 0.4.0
+Version: 0.5.0
 Requires at least: 6.5
 Tested up to: 6.7
 Requires PHP: 8.2
@@ -68,6 +68,7 @@ button, input, textarea, select { font: inherit; }
 .oh-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2rem; }
 
 .oh-section { padding-block: clamp(4.5rem, 9vw, 8rem); }
+.oh-section--nested { padding-bottom: 0; }
 .oh-section-heading { max-width: 760px; margin-bottom: 2rem; }
 .oh-section-heading h2, .archive-header h1, .page-header h1, .single-entry__header h1 { margin: .4rem 0; font-size: clamp(2.2rem, 5vw, 4rem); line-height: 1.05; letter-spacing: -.04em; }
 .oh-section-heading p, .archive-header p, .page-header p, .lead { color: var(--oh-muted); }

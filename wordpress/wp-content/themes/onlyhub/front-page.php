@@ -54,7 +54,7 @@ $items      = onlyhub_ecosystem_items();
                         <div class="oh-card-icon" aria-hidden="true">O</div>
                         <h3><?php echo esc_html($item['name']); ?></h3>
                         <p><?php echo esc_html($item['description']); ?></p>
-                        <a href="<?php echo esc_url(home_url('/ecosystem/' . $item['slug'] . '/')); ?>">
+                        <a href="<?php echo esc_url(onlyhub_direction_url($item['slug'])); ?>">
                             <?php esc_html_e('Explore direction', 'onlyhub'); ?>
                         </a>
                     </article>

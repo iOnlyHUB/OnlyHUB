@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 get_header();
 ?>
-<main id="primary" class="site-main section-shell">
+<main id="main-content" class="site-main section-shell">
     <header class="archive-header">
         <p class="eyebrow"><?php esc_html_e('OnlyHUB Network', 'onlyhub'); ?></p>
         <h1><?php post_type_archive_title(); ?></h1>

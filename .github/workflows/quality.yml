@@ -28,6 +28,18 @@ jobs:
           test -f wordpress/wp-content/themes/onlyhub/style.css
           test -f wordpress/wp-content/themes/onlyhub/functions.php
           test -f wordpress/wp-content/themes/onlyhub/front-page.php
+          test -f wordpress/wp-content/themes/onlyhub/page-support.php
+          test -f wordpress/wp-content/themes/onlyhub/page-reports.php
+      - name: Validate public template contracts
+        run: |
+          if grep -R '<main id="primary"\|<main id="main"' wordpress/wp-content/themes/onlyhub --include='*.php'; then
+            echo 'Public templates must expose the #main-content skip-link target.'
+            exit 1
+          fi
+          if git grep -n "'onlyhub_direction'" -- wordpress; then
+            echo 'Use the registered oh_direction taxonomy name.'
+            exit 1
+          fi
       - name: Reject committed secrets
         run: |
           if git grep -nE '(sk-proj-|BEGIN (RSA|OPENSSH|EC) PRIVATE KEY|password[[:space:]]*=[[:space:]]*[^$<{])' -- ':!*.example' ':!*.md'; then

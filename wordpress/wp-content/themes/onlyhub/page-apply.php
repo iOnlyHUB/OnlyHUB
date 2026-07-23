@@ -10,7 +10,7 @@ declare(strict_types=1);
 get_header();
 $status = isset($_GET['application']) ? sanitize_key(wp_unslash($_GET['application'])) : '';
 ?>
-<main id="primary" class="site-main section-shell">
+<main id="main-content" class="site-main section-shell">
     <header class="page-header">
         <p class="eyebrow"><?php esc_html_e('Join OnlyHUB', 'onlyhub'); ?></p>
         <h1><?php the_title(); ?></h1>

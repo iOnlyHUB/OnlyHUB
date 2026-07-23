@@ -17,7 +17,7 @@ $roleLabel = $roles ? implode(', ', array_map(static fn (string $role): string =
 
 get_header();
 ?>
-<main id="primary" class="site-main section-shell">
+<main id="main-content" class="site-main section-shell">
     <header class="page-header dashboard-header">
         <p class="eyebrow"><?php esc_html_e('OnlyHUB account', 'onlyhub'); ?></p>
         <h1><?php echo esc_html(sprintf(__('Welcome, %s', 'onlyhub'), $user->display_name ?: $user->user_login)); ?></h1>

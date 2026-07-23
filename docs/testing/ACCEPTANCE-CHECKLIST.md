@@ -20,12 +20,15 @@ Use this checklist before merging or deploying any release.
 
 ## Functional checks
 
-- [ ] Homepage, project archive and project details return HTTP 200.
+- [ ] Homepage, project, campaign and partner archives return HTTP 200.
+- [ ] Ecosystem, Support and Transparency Centre pages return HTTP 200.
+- [ ] Every public template exposes the `#main-content` keyboard skip-link target.
 - [ ] Navigation works with keyboard only.
 - [ ] Search and 404 pages work.
 - [ ] Contact form uses server-side validation, nonce protection and anti-spam controls.
 - [ ] Emails are delivered through an authenticated SMTP provider.
 - [ ] Donation buttons point only to approved payment pages.
+- [ ] Unverified campaigns and report links are excluded from Support and Transparency Centre pages.
 
 ## Security
 

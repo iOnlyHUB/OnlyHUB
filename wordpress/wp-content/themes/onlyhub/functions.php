@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-const ONLYHUB_THEME_VERSION = '0.1.0';
+const ONLYHUB_THEME_VERSION = '0.5.0';
 
 add_action('after_setup_theme', static function (): void {
     load_theme_textdomain('onlyhub', get_template_directory() . '/languages');
@@ -132,4 +132,53 @@ function onlyhub_ecosystem_items(): array
         ['slug' => 'innovation', 'name' => 'OnlyHUB Innovation', 'description' => __('Technology, education and digital products for social impact.', 'onlyhub')],
         ['slug' => 'production', 'name' => 'OnlyHUB Production', 'description' => __('Production, printing and technical support for humanitarian programmes.', 'onlyhub')],
     ];
+}
+
+/**
+ * Resolves a public OnlyHUB direction URL without creating broken links.
+ */
+function onlyhub_direction_url(string $slug): string
+{
+    $term = get_term_by('slug', sanitize_title($slug), 'oh_direction');
+
+    if ($term instanceof WP_Term) {
+        $url = get_term_link($term);
+        if (! is_wp_error($url)) {
+            return $url;
+        }
+    }
+
+    $archive = get_post_type_archive_link('oh_project');
+
+    return is_string($archive) ? $archive : home_url('/');
+}
+
+/**
+ * Accessible navigation shown until an editor assigns a WordPress menu.
+ *
+ * @param array<string, mixed> $args Menu arguments supplied by wp_nav_menu().
+ */
+function onlyhub_primary_menu_fallback(array $args = []): void
+{
+    $items = [
+        ['label' => __('Home', 'onlyhub'), 'url' => home_url('/')],
+        ['label' => __('Projects', 'onlyhub'), 'url' => get_post_type_archive_link('oh_project')],
+        ['label' => __('Campaigns', 'onlyhub'), 'url' => get_post_type_archive_link('oh_campaign')],
+        ['label' => __('Ecosystem', 'onlyhub'), 'url' => home_url('/ecosystem/')],
+        ['label' => __('Reports', 'onlyhub'), 'url' => home_url('/reports/')],
+        ['label' => __('Apply', 'onlyhub'), 'url' => home_url('/apply/')],
+    ];
+
+    echo '<ul class="menu">';
+    foreach ($items as $item) {
+        if (! is_string($item['url']) || $item['url'] === '') {
+            continue;
+        }
+        printf(
+            '<li><a href="%1$s">%2$s</a></li>',
+            esc_url($item['url']),
+            esc_html($item['label'])
+        );
+    }
+    echo '</ul>';
 }

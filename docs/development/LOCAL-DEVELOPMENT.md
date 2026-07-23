@@ -21,6 +21,14 @@ Adminer is available at `http://localhost:8081` for local database inspection on
 In WordPress administration, open **Appearance → Themes** and activate **OnlyHUB**.
 Then open **Settings → Permalinks** and save once to register project, partner and campaign routes.
 
+To create the safe demonstration pages, OnlyHUB direction terms and public routes:
+
+```bash
+scripts/seed-demo-content.sh
+```
+
+The seed command creates `/ecosystem/`, `/support/`, `/reports/`, `/apply/`, `/register/` and the other baseline pages. It does not enable payments or publish invented financial results.
+
 ## Stop services
 
 ```bash

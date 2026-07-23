@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 get_header();
 ?>
-<main id="main" class="site-main">
+<main id="main-content" class="site-main">
     <?php while (have_posts()) : the_post(); ?>
         <article <?php post_class('project-detail'); ?>>
             <header class="project-hero section-shell">

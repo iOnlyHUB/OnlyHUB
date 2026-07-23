@@ -10,7 +10,7 @@ declare(strict_types=1);
 get_header();
 $status = isset($_GET['registration']) ? sanitize_key(wp_unslash($_GET['registration'])) : '';
 ?>
-<main id="primary" class="site-main section-shell">
+<main id="main-content" class="site-main section-shell">
     <header class="page-header">
         <p class="eyebrow"><?php esc_html_e('OnlyHUB account', 'onlyhub'); ?></p>
         <h1><?php esc_html_e('Create your account', 'onlyhub'); ?></h1>

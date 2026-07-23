@@ -27,6 +27,9 @@ create_page "Екосистема" "ecosystem" "Foundation, Business, News, Medi
 create_page "Контакти" "contacts" "Додайте офіційні реквізити, адресу, електронну пошту та перевірені канали зв’язку перед публікацією." "page-contact.php"
 create_page "Подати заявку" "apply" "Захищена форма для партнерів, волонтерів, донорів і представників медіа." "page-apply.php"
 create_page "Особистий кабінет" "dashboard" "Приватна сторінка користувача OnlyHUB." "page-dashboard.php"
+create_page "Реєстрація" "register" "Створення захищеного облікового запису OnlyHUB." "page-register.php"
+create_page "Підтримати" "support" "Перевірені кампанії та безпечні способи долучитися до OnlyHUB." "page-support.php"
+create_page "Звіти та прозорість" "reports" "Перевірені звіти кампаній і правила публікації OnlyHUB." "page-reports.php"
 create_page "Політика конфіденційності" "privacy-policy" "Чернетка. Перед запуском потрібна юридична перевірка та актуалізація відповідно до законодавства й реальних процесів обробки даних."
 
 PRIVACY_ID="$(run_wp post list --post_type=page --name=privacy-policy --field=ID | head -n1)"
@@ -41,6 +44,25 @@ fi
 run_wp option update show_on_front page
 run_wp option update page_on_front "$HOME_ID"
 
+while IFS='|' read -r name slug; do
+  if ! run_wp term get oh_direction "$slug" --by=slug --field=term_id >/dev/null 2>&1; then
+    run_wp term create oh_direction "$name" --slug="$slug"
+  fi
+done <<'EOF'
+OnlyHUB Foundation|foundation
+OnlyHUB Support|support
+OnlyHUB Business|business
+OnlyHUB News|news
+OnlyHUB Media|media
+OnlyHUB Music|music
+OnlyHUB Healthcare|healthcare
+OnlyHUB Clinical Service|clinical-service
+OnlyHUB Defence Support|defence-support
+OnlyHUB Stop War|stop-war
+OnlyHUB Innovation|innovation
+OnlyHUB Production|production
+EOF
+
 for project in \
   "Humanitarian Support|Пілотна сторінка гуманітарної програми без фінансових показників." \
   "Children and Education|Демонстраційний проєкт підтримки дітей та освіти." \
@@ -53,4 +75,6 @@ for project in \
   fi
 done
 
-echo "Demo content created. Review every public statement before production use."
+run_wp rewrite flush --hard
+
+echo "Demo content and OnlyHUB routes created. Review every public statement before production use."

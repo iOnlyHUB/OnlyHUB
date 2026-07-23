@@ -32,7 +32,7 @@ declare(strict_types=1);
             wp_nav_menu([
                 'theme_location' => 'primary',
                 'container'      => false,
-                'fallback_cb'    => false,
+                'fallback_cb'    => 'onlyhub_primary_menu_fallback',
             ]);
             ?>
         </nav>

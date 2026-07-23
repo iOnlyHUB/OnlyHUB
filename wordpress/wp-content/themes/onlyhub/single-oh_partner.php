@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 get_header();
 ?>
-<main id="primary" class="site-main section-shell">
+<main id="main-content" class="site-main section-shell">
     <?php while (have_posts()) : the_post(); ?>
         <article <?php post_class('single-entry'); ?>>
             <header class="single-entry__header">
