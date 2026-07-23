@@ -4,7 +4,7 @@ Theme URI: https://only-hub.org
 Author: OnlyHUB
 Author URI: https://only-hub.org
 Description: Custom, accessible and performance-focused WordPress theme for the OnlyHUB international charity ecosystem.
-Version: 0.2.0
+Version: 0.3.0
 Requires at least: 6.5
 Tested up to: 6.7
 Requires PHP: 8.2
@@ -104,6 +104,19 @@ button, input, textarea, select { font: inherit; }
 .notice--success { border-color: rgba(50,214,160,.55); }
 .notice--error { border-color: rgba(255,122,138,.65); }
 
+.campaign-summary { margin-block: 2rem; padding: clamp(1.25rem, 4vw, 2rem); border: 1px solid var(--oh-border); border-radius: var(--oh-radius-lg); background: linear-gradient(155deg, rgba(124,77,255,.14), rgba(255,255,255,.03)); }
+.campaign-summary__topline { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.campaign-summary__topline strong { display: block; margin-top: .35rem; font-size: clamp(1.8rem, 5vw, 3rem); line-height: 1; }
+.campaign-summary__topline span { color: var(--oh-muted); }
+.campaign-badge { display: inline-flex; padding: .5rem .75rem; border: 1px solid var(--oh-border); border-radius: 999px; font-size: .85rem; font-weight: 700; }
+.campaign-badge--verified { border-color: rgba(50,214,160,.55); color: var(--oh-accent) !important; background: rgba(50,214,160,.08); }
+.campaign-progress { height: .8rem; margin-block: 1.4rem; overflow: hidden; border-radius: 999px; background: rgba(255,255,255,.08); }
+.campaign-progress span { display: block; height: 100%; min-width: 0; border-radius: inherit; background: linear-gradient(90deg, var(--oh-primary), var(--oh-accent)); }
+.campaign-meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; margin: 0; }
+.campaign-meta div { padding-top: .8rem; border-top: 1px solid var(--oh-border); }
+.campaign-meta dt { color: var(--oh-muted); font-size: .82rem; text-transform: uppercase; letter-spacing: .08em; }
+.campaign-meta dd { margin: .25rem 0 0; font-weight: 700; }
+
 .oh-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
 .oh-stat { padding: 1.4rem; border-top: 1px solid var(--oh-border); }
 .oh-stat strong { display: block; font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1; }
@@ -123,10 +136,11 @@ button, input, textarea, select { font: inherit; }
   .oh-stats { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 620px) {
-  .oh-grid, .card-grid, .oh-stats { grid-template-columns: 1fr; }
+  .oh-grid, .card-grid, .oh-stats, .campaign-meta { grid-template-columns: 1fr; }
   .oh-header-inner { min-height: 66px; }
   .oh-hero-content { padding-bottom: 3rem; }
   .oh-actions .oh-button, .application-form .button { width: 100%; }
+  .campaign-summary__topline { flex-direction: column; }
 }
 
 @media (prefers-reduced-motion: reduce) {
