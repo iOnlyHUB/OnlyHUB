@@ -1,0 +1,52 @@
+name: Quality
+
+on:
+  push:
+    branches: [main, agent/repository-bootstrap]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  php-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check PHP syntax
+        run: |
+          find wordpress -type f -name '*.php' -print0 | xargs -0 -n1 php -l
+
+  repository-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate required files
+        run: |
+          test -f docker-compose.yml
+          test -f .env.example
+          test -f wordpress/wp-content/themes/onlyhub/style.css
+          test -f wordpress/wp-content/themes/onlyhub/functions.php
+          test -f wordpress/wp-content/themes/onlyhub/front-page.php
+          test -f wordpress/wp-content/themes/onlyhub/page-support.php
+          test -f wordpress/wp-content/themes/onlyhub/page-reports.php
+      - name: Validate public template contracts
+        run: |
+          if grep -R '<main id="primary"\|<main id="main"' wordpress/wp-content/themes/onlyhub --include='*.php'; then
+            echo 'Public templates must expose the #main-content skip-link target.'
+            exit 1
+          fi
+          if git grep -n "'onlyhub_direction'" -- wordpress; then
+            echo 'Use the registered oh_direction taxonomy name.'
+            exit 1
+          fi
+      - name: Reject committed secrets
+        run: |
+          openai_key_prefix='sk-'
+          openai_project_marker='proj-'
+          private_key_marker='BEGIN'
+          secret_pattern="(${openai_key_prefix}${openai_project_marker}|${private_key_marker} (RSA|OPENSSH|EC) PRIVATE KEY|(password|passwd|secret|token)[[:space:]]*[:=][[:space:]]*['\"][^\$<{])"
+          if git grep -nE "$secret_pattern" -- ':!*.example' ':!*.md'; then
+            echo 'Potential secret detected.'
+            exit 1
+          fi

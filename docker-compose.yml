@@ -1,0 +1,70 @@
+services:
+  db:
+    image: mariadb:11.4
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: ${WORDPRESS_DB_NAME:-onlyhub}
+      MARIADB_USER: ${WORDPRESS_DB_USER:-onlyhub}
+      MARIADB_PASSWORD: ${WORDPRESS_DB_PASSWORD:-onlyhub_local_password}
+      MARIADB_ROOT_PASSWORD: ${WORDPRESS_DB_ROOT_PASSWORD:-onlyhub_root_password}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  wordpress:
+    image: wordpress:6.7.1-php8.3-apache
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${WORDPRESS_PORT:-8080}:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME:-onlyhub}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER:-onlyhub}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD:-onlyhub_local_password}
+      WORDPRESS_DEBUG: ${WORDPRESS_DEBUG:-1}
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_ENVIRONMENT_TYPE', '${WP_ENVIRONMENT_TYPE:-local}');
+        define('DISALLOW_FILE_EDIT', true);
+        define('AUTOMATIC_UPDATER_DISABLED', true);
+    volumes:
+      - wordpress_data:/var/www/html
+      - ./wordpress/wp-content/themes/onlyhub:/var/www/html/wp-content/themes/onlyhub
+      - ./wordpress/wp-content/mu-plugins:/var/www/html/wp-content/mu-plugins
+
+  wpcli:
+    image: wordpress:cli-2.11.0-php8.3
+    depends_on:
+      db:
+        condition: service_healthy
+      wordpress:
+        condition: service_started
+    user: "33:33"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME:-onlyhub}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER:-onlyhub}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD:-onlyhub_local_password}
+    volumes:
+      - wordpress_data:/var/www/html
+      - ./wordpress/wp-content/themes/onlyhub:/var/www/html/wp-content/themes/onlyhub
+      - ./wordpress/wp-content/mu-plugins:/var/www/html/wp-content/mu-plugins
+    entrypoint: ["wp", "--path=/var/www/html", "--allow-root"]
+
+  adminer:
+    image: adminer:4
+    restart: unless-stopped
+    depends_on:
+      - db
+    ports:
+      - "${ADMINER_PORT:-8081}:8080"
+
+volumes:
+  db_data:
+  wordpress_data:

@@ -1,0 +1,44 @@
+name: Package OnlyHUB theme
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - agent/repository-bootstrap
+    paths:
+      - 'wordpress/wp-content/themes/onlyhub/**'
+      - '.github/workflows/package-theme.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate PHP syntax
+        run: |
+          find wordpress/wp-content/themes/onlyhub -name '*.php' -print0 | xargs -0 -n1 php -l
+
+      - name: Build ZIP
+        run: |
+          mkdir -p dist
+          cd wordpress/wp-content/themes
+          zip -r ../../../dist/onlyhub-theme.zip onlyhub \
+            -x '*/.DS_Store' '*/node_modules/*' '*/vendor/*'
+
+      - name: Generate checksum
+        run: sha256sum dist/onlyhub-theme.zip > dist/onlyhub-theme.zip.sha256
+
+      - name: Upload package
+        uses: actions/upload-artifact@v4
+        with:
+          name: onlyhub-theme
+          path: |
+            dist/onlyhub-theme.zip
+            dist/onlyhub-theme.zip.sha256
+          if-no-files-found: error
+          retention-days: 14
